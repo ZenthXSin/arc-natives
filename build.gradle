@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'com.github.modvalidator'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+// Natives are in src/main/resources/ root — packaged directly into jar
+// ArcNativesLoader uses SharedLibraryLoader.load("arc") which calls
+// getResourceAsStream("/libarc64.so") (or platform equivalent)
+// All platform natives coexist in the same jar; only the matching one is loaded at runtime.
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+publishing {
+    repositories {
+        mavenLocal()
+    }
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
